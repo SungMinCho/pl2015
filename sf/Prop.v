@@ -51,7 +51,7 @@ Inductive ev : nat -> Prop :=
 Theorem double_even : forall n,
   ev (double n).
 Proof.
-  (* FILL IN HERE *) Admitted.
+induction n. apply ev_0. simpl. apply ev_SS. auto. Qed.
 (** [] *)
 
 
@@ -401,9 +401,9 @@ Proof.
 Theorem ev_minus2: forall n,  ev n -> ev (pred (pred n)). 
 Proof.
   intros n E.
-  inversion E as [| n' E'].
+  inversion E.
   Case "E = ev_0". simpl. apply ev_0. 
-  Case "E = ev_SS n' E'". simpl. apply E'.  Qed.
+  Case "E = ev_SS n' E'". simpl. apply H.  Qed.
 
 (** **** Exercise: 1 star, optional (ev_minus2_n)  *)
 (** What happens if we try to use [destruct] on [n] instead of [inversion] on [E]? *)
