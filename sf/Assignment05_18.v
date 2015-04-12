@@ -10,7 +10,9 @@ Require Export Assignment05_17.
 Theorem gorgeous_plus13: forall n, 
   gorgeous n -> gorgeous (13+n).
 Proof.
-   (* FILL IN HERE *) admit.
+  intros. replace (13 + n) with (5 + (5 + (3 + n))).
+  constructor 3. constructor 3. constructor. apply H.
+  apply plus_assoc.
 Qed.
 (** [] *)
 

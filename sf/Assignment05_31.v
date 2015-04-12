@@ -5,6 +5,6 @@ Require Export Assignment05_30.
 Theorem n_le_m__Sn_le_Sm : forall n m,
   n <= m -> S n <= S m.
 Proof. 
-  (* FILL IN HERE *) admit.
+  intros. induction H. constructor. constructor. apply IHle.
 Qed.
 

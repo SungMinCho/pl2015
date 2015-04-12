@@ -9,7 +9,8 @@ Require Export Assignment05_18.
 Theorem gorgeous_sum : forall n m,
   gorgeous n -> gorgeous m -> gorgeous (n + m).
 Proof.
- (* FILL IN HERE *) admit.
+  intros. induction H. apply H0. rewrite <- plus_assoc. constructor. apply IHgorgeous.
+  rewrite <- plus_assoc. constructor 3. apply IHgorgeous.
 Qed.
 (** [] *)
 

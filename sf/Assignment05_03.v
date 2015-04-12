@@ -15,7 +15,7 @@ Require Export Assignment05_02.
 Theorem iff_refl : forall P : Prop, 
   P <-> P.
 Proof. 
-  (* FILL IN HERE *) admit.
+intros. repeat split;intro;assumption.
 Qed.
 
 
