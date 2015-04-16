@@ -1,4 +1,3 @@
-
 Require Export MoreCoq.
 
 (* Important: 
