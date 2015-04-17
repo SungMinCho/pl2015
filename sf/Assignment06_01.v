@@ -10,7 +10,9 @@ Require Export Assignment06_00.
 Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
   (forall x, P x) -> ~ (exists x, ~ P x).
 Proof. 
-  (* FILL IN HERE *) admit.
+  intros. unfold not. intros.
+  inversion H0. assert (P witness). apply H.
+  apply proof in H1. apply H1.
 Qed.
 (** [] *)
 

@@ -15,7 +15,9 @@ Require Export Assignment06_06.
     does not stutter.) *)
 
 Inductive nostutter:  list nat -> Prop :=
- (* FILL IN HERE *)
+| nostutter_nil : nostutter []
+| nostutter_single : forall n, nostutter [n]
+| nostutter_cons : forall a b l, a <> b -> nostutter (b::l) -> nostutter (a::b::l)
 .
 
 (** Make sure each of these tests succeeds, but you are free
@@ -31,32 +33,20 @@ Inductive nostutter:  list nat -> Prop :=
     tactics.  *)
 
 Example test_nostutter_1:      nostutter [3;1;4;1;5;6].
-(* FILL IN HERE *) Admitted.
-(* 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
 
 Example test_nostutter_2:  nostutter [].
-(* FILL IN HERE *) Admitted.
-(* 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
 
 Example test_nostutter_3:  nostutter [5].
-(* FILL IN HERE *) Admitted.
-(* 
   Proof. repeat constructor; apply beq_nat_false; auto. Qed.
-*)
 
 Example test_nostutter_4:      not (nostutter [3;1;1;4]).
-(* FILL IN HERE *) Admitted.
-(* 
   Proof. intro.
   repeat match goal with 
     h: nostutter _ |- _ => inversion h; clear h; subst 
   end.
   contradiction H1; auto. Qed.
-*)
 (** [] *)
 
 
