@@ -622,14 +622,63 @@ Definition de_morgan_not_and_not := forall P Q:Prop,
 Definition implies_to_or := forall P Q:Prop, 
   (P->Q) -> (~P\/Q). 
 
-(* FILL IN HERE *)
-(** [] *)
+Theorem p_c:
+peirce -> classic.
+Proof.
+unfold peirce. unfold classic. unfold not.
+intros. apply H with False. intros. apply H0 in H1. inversion H1. Qed.
+
+Lemma not_or:
+forall P Q, ~(P \/ Q) -> (~ P /\ ~ Q).
+Proof.
+unfold not. intros.
+split. intros. assert (P \/ Q). left. assumption. apply H in H1.
+inversion H1. intros. assert (P \/ Q). right;assumption. apply H in H1.
+inversion H1. Qed.
+
+Theorem c_e:
+classic -> excluded_middle.
+unfold classic. unfold excluded_middle.
+intros. apply H. unfold not. intros.
+apply not_or in H0. destruct H0. apply H in H1.
+apply H0 in H1. inversion H1. Qed.
+
+Theorem e_d:
+excluded_middle -> de_morgan_not_and_not.
+Proof.
+unfold excluded_middle. unfold de_morgan_not_and_not.
+intros. unfold not in *. assert (H1 := H P).
+inversion H1. left;assumption. assert (H3 := H Q).
+inversion H3. right;assumption. assert (~ P /\ ~ Q).
+split. unfold not. apply H2. unfold not. apply H4.
+apply H0 in H5. inversion H5. Qed.
+
+Theorem d_i:
+de_morgan_not_and_not -> implies_to_or.
+Proof.
+unfold de_morgan_not_and_not. unfold implies_to_or.
+intros. apply H. unfold not. intros.
+destruct H1. assert (P -> False).
+intros. apply H0 in H3. apply H2 in H3. inversion H3.
+apply H1 in H3. inversion H3. Qed.
+
+Theorem i_p :
+implies_to_or -> peirce.
+Proof.
+unfold implies_to_or. unfold peirce.
+intros. assert (pp : forall (P:Prop), P -> P).
+intros. apply H1. assert (forall (P:Prop), ~ P \/ P).
+intros. assert (H2 := H P0 P0). apply H2. apply pp.
+assert (H2 := H1 P). assert (H3 := H1 Q).
+unfold not in *.
+inversion H2. apply H0. intros. apply H4 in H5. inversion H5.
+apply H4. Qed.
 
 (** **** Exercise: 3 stars (excluded_middle_irrefutable)  *)
-(** This theorem implies that it is always safe to add a decidability
-axiom (i.e. an instance of excluded middle) for any _particular_ Prop [P].
+(** This thorem implies that it is always safe to add a decidability
+axiom (i.e. n instance of excluded middle) for any _particular_ Prop [P].
 Why? Because we cannot prove the negation of such an axiom; if we could,
-we would have both [~ (P \/ ~P)] and [~ ~ (P \/ ~P)], a contradiction. *)
+we wouintrosdld have both [~ (P \/ ~P)] and [~ ~ (P \/ ~P)], a contradiction. *)
 
 Theorem excluded_middle_irrefutable:  forall (P:Prop), ~ ~ (P \/ ~ P).  
 Proof.

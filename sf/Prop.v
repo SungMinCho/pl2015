@@ -584,8 +584,11 @@ Qed.
        forall l, pal l -> l = rev l.
 *)
 
-(* FILL IN HERE *)
-(** [] *)
+Inductive pal {X: Type} : list X -> Prop :=
+| pal_nil : pal []
+| pal_single : forall x : X, pal [x]
+| pal_add : forall (lst : list X) (x : X), pal lst -> pal (x :: (snoc lst x))
+.
 
 (* Again, the converse direction is much more difficult, due to the
 lack of evidence. *)
@@ -596,8 +599,106 @@ lack of evidence. *)
      forall l, l = rev l -> pal l.
 *)
 
-(* FILL IN HERE *)
-(** [] *)
+Print rev.
+
+Lemma form:
+forall (X:Type)(x:X)(l:list X),
+(exists (l':list X)(x':X), snoc l' x' = x :: l).
+Proof.
+intros. generalize dependent x.
+induction l. exists []. exists x. reflexivity.
+intros. assert (H := IHl x). inversion H.
+inversion H0. exists (x0 :: x1). exists x2.
+simpl. rewrite H1. reflexivity. Qed.
+
+Lemma rev_snoc:
+forall (X:Type)(l:list X)(x:X), rev(snoc l x) = x :: (rev l).
+Proof.
+induction l. reflexivity. intros.
+simpl. rewrite IHl. reflexivity. Qed.
+
+Lemma cons_snoc:
+forall (X:Type) (x x2:X) (l:list X),
+x :: (snoc l x2) = snoc (x :: l) x2.
+Proof.
+induction l. simpl. reflexivity.
+simpl. reflexivity. Qed.
+
+Lemma snoc_same:
+forall (X:Type)(x x2:X) (l l2:list X),
+snoc l x = snoc l x2 -> x = x2.
+Proof.
+intros. induction l. inversion H. reflexivity.
+inversion H. apply IHl in H1. apply H1. Qed.
+
+Lemma snoc_same_2:
+forall (X:Type)(x x2:X) (l l2:list X),
+snoc l x = snoc l2 x2 -> l = l2.
+Proof.
+induction l. induction l2. reflexivity. intros.
+inversion H. destruct l2. inversion H2. inversion H2.
+induction l2. intros. inversion H. destruct l.
+inversion H2. inversion H2. intros. inversion H.
+apply IHl in H2. rewrite H2. reflexivity. Qed.
+
+Lemma snoc_same_main:
+forall (X:Type)(x x2:X)(l l2:list X),
+snoc l x = snoc l2 x2 -> x = x2.
+Proof.
+intros. assert (H2 := H). apply snoc_same_2 in H.
+rewrite H in H2. apply snoc_same in H2. apply H2. apply l. Qed.
+
+Lemma help0:
+forall (X:Type)(l:list X), length l = 0 -> l = [].
+Proof. destruct l. reflexivity. intros. inversion H. Qed.
+
+Lemma help1:
+forall (X:Type)(l:list X), length l = 1 -> (exists x, l = [x]).
+Proof. destruct l. intros. inversion H. destruct l. intros.
+exists x. reflexivity. intros. inversion H. Qed.
+
+Lemma help_super:
+forall (X:Type)(l:list X), length l >= 2 /\ l = rev l ->
+(exists x l2, l = (x :: (snoc l2 x)) /\ l2 = rev l2).
+Proof. intros. destruct H. destruct l. inversion H.
+destruct l. inversion H. inversion H2.
+assert (H1 := form X x0 l). inversion H1. inversion H2.
+rewrite <- H3 in H0. simpl in *.
+exists x. exists x1. split. rewrite cons_snoc in H0.
+apply snoc_same_main in H0. rewrite <- H0.
+rewrite H3. reflexivity. assert (HH := H0).
+rewrite cons_snoc in H0. apply snoc_same_main in H0.
+rewrite H0 in HH. rewrite cons_snoc in HH.
+apply snoc_same_2 in HH. rewrite rev_snoc in HH.
+inversion HH. rewrite <- H5. apply H5. Qed.
+
+Theorem n_le_m__Sn_le_Sm : forall n m,
+  n <= m -> S n <= S m.
+Proof. 
+  intros. induction H. constructor. constructor. apply IHle.
+Qed.
+
+Theorem O_le_n : forall n,
+  0 <= n.
+Proof.
+  induction n. constructor. constructor. apply IHn.
+Qed.
+
+Theorem nodap_helper: forall (X:Type) (l:list X),
+
+
+Theorem nodap: forall (X:Type) (l:list X), l = rev l -> pal l.
+Proof.
+intros. destruct l eqn:E. constructor.
+destruct l0. constructor.
+assert (length l >= 2). rewrite E. simpl.
+destruct (length l0). constructor.
+repeat (apply n_le_m__Sn_le_Sm). apply O_le_n.
+rewrite <- E in H. assert (length l >= 2 /\ l = rev l).
+split. apply H0. apply H.
+apply help_super in H1. inversion H1. inversion H2.
+destruct H3. rewrite <- E. rewrite H3. constructor.
+
 
 
 
