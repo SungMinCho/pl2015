@@ -6,7 +6,7 @@ Require Export Assignment07_04.
 Theorem update_eq : forall n x st,
   (update st x n) x = n.
 Proof.
-  (* FILL IN HERE *) admit.
+  intros. unfold update. apply eq_id.
 Qed.
 (** [] *)
 
