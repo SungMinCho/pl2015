@@ -2,3 +2,5 @@
 *.v.d
 *.vo
 *.glob
+*.html
+github_files/*
