@@ -9,15 +9,24 @@ Require Export Assignment08_01.
    (this latter part is trickier than you might expect). *)
 
 Definition pup_to_n : com :=
-  FILL_IN_HERE.
+  Y ::= ANum 0 ;;
+  WHILE BLe (ANum 1) (AId X) DO
+    Y ::= APlus (AId Y) (AId X) ;;
+    X ::= AMinus (AId X) (ANum 1) END.
 
-Example pup_to_2_ceval :
+Theorem pup_to_2_ceval :
   pup_to_n / (update empty_state X 2) ||
     update (update (update (update (update (update empty_state
       X 2) Y 0) Y 2) X 1) Y 3) X 0.
 Proof.
-  exact FILL_IN_HERE.
-Qed.
+  apply E_Seq with (update (update empty_state X 2) Y 0).
+  apply E_Ass. reflexivity.
+  apply E_WhileLoop with (update (update (update (update empty_state X 2) Y 0) Y 2) X 1).
+  reflexivity. apply E_Seq with (update (update (update empty_state X 2) Y 0) Y 2);
+  apply E_Ass; reflexivity.
+  apply E_WhileLoop with (update (update (update (update (update (update empty_state X 2) Y 0) Y 2) X 1) Y 3) X 0).
+  reflexivity. apply E_Seq with (update (update (update (update (update empty_state X 2) Y 0) Y 2) X 1) Y 3);
+  apply E_Ass; reflexivity. apply E_WhileEnd. reflexivity. Qed.
 
 (*-- Check --*)
 Check pup_to_2_ceval :

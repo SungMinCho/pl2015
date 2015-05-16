@@ -6,7 +6,10 @@ Require Export Assignment08_09.
 Theorem seq_assoc : forall c1 c2 c3,
   cequiv ((c1;;c2);;c3) (c1;;(c2;;c3)).
 Proof.
-  exact FILL_IN_HERE.
+  split. intros. inversion H; subst. inversion H2; subst. apply E_Seq with st'1.
+  assumption. apply E_Seq with st'0; assumption.
+  intros. inversion H; subst. inversion H5; subst. apply E_Seq with st'1; try assumption.
+  apply E_Seq with st'0; assumption.
 Qed.
 
 (*-- Check --*)

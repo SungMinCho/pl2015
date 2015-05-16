@@ -7,7 +7,13 @@ Require Export Assignment08_04.
     same as pushing the value of the expression on the stack. *)
 
 Fixpoint s_compile (e : aexp) : list sinstr :=
-  FILL_IN_HERE.
+match e with
+| ANum n => [SPush n]
+| AId i => [SLoad i]
+| APlus a b => (s_compile a)++(s_compile b)++[SPlus]
+| AMinus a b => (s_compile a)++(s_compile b)++[SMinus]
+| AMult a b => (s_compile a)++(s_compile b)++[SMult]
+end.
 
 (** After you've defined [s_compile], prove the following to test
     that it works. *)
@@ -16,7 +22,7 @@ Example s_compile1 :
     s_compile (AMinus (AId X) (AMult (ANum 2) (AId Y)))
   = [SLoad X; SPush 2; SLoad Y; SMult; SMinus].
 Proof.
-  exact FILL_IN_HERE.
+  reflexivity.
 Qed.
 
 (** **** Exercise: 3 stars, advanced (stack_compiler_correct)  *)
@@ -33,10 +39,20 @@ Qed.
     general lemma to get a usable induction hypothesis; the main
     theorem will then be a simple corollary of this lemma. *)
 
+Lemma s_execute_app: forall (st : state) (s1 s2 : list sinstr) (s : list nat),
+  s_execute st s (s1 ++ s2) = s_execute st (s_execute st s s1) s2.
+Proof.
+  induction s1. reflexivity. intros. induction a;try (simpl;rewrite IHs1;reflexivity);
+  try (simpl; destruct s; try (destruct s); apply IHs1).
+Qed.
+
 Theorem s_compile_correct : forall (st : state) (e : aexp),
   s_execute st [] (s_compile e) = [ aeval st e ].
 Proof.
-  exact FILL_IN_HERE.
+  intros. generalize dependent st. generalize ([]:list nat).
+  induction e;intros;simpl; try reflexivity;
+  try(rewrite s_execute_app; rewrite IHe1;
+  rewrite s_execute_app; rewrite IHe2; reflexivity).
 Qed.
 
 (*-- Check --*)

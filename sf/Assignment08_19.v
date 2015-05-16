@@ -5,7 +5,9 @@ Require Export Assignment08_18.
 Lemma constfold_0plus_sound:
   ctrans_sound constfold_0plus.
 Proof.
-  exact FILL_IN_HERE.
+  unfold ctrans_sound. unfold constfold_0plus.
+  intros. apply trans_cequiv with (fold_constants_com c). apply fold_constants_com_sound.
+  apply optimize_0plus_com_sound.
 Qed.
 
 (*-- Check --*)
