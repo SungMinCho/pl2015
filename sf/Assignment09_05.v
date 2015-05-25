@@ -13,7 +13,13 @@ Theorem if_minus_plus :
   FI
   {{fun st => st Y = st X + st Z}}. 
 Proof.
-  exact FILL_IN_HERE.
+  remember (BLe (AId X) (AId Y)) as b. remember (fun st:state => st Y = st X + st Z) as F.
+  remember (F [Z |-> AMinus (AId Y) (AId X)]) as Q1. remember (F [Y |-> APlus (AId X) (AId Z)]) as Q2.
+  apply hoare_consequence_pre with 
+  (P' := (fun st:state => (beval st b = true -> Q1 st) /\ (beval st b = false -> Q2 st))).
+  apply hoare_if; subst; apply hoare_asgn.
+  unfold assert_implies. intros. split;subst;intros;unfold assn_sub;unfold update;simpl.
+  inversion H0. apply ble_nat_true in H2. symmetry. omega. reflexivity.
 Qed.
 
 (*-- Check --*)
