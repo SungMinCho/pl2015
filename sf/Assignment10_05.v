@@ -2,6 +2,8 @@ Require Export Assignment10_04.
 
 (* problem #05: 10 points *)
 
+Hint Constructors step.
+
 (** **** Exercise: 2 stars (test_multistep_4)  *)
 Lemma test_multistep_4:
       P
@@ -14,7 +16,17 @@ Lemma test_multistep_4:
         (C 0)
         (C (2 + (0 + 3))).
 Proof.
-  exact FILL_IN_HERE.
+eapply multi_step.
+apply ST_Plus2.
+constructor.
+apply ST_Plus2.
+constructor.
+eauto.
+eapply multi_step.
+apply ST_Plus2.
+constructor.
+eauto.
+constructor.
 Qed.
 
 (*-- Check --*)

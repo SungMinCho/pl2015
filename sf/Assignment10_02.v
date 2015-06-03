@@ -28,9 +28,22 @@ Require Export Assignment10_01.
     maximum benefit from the exercise you should try to write it from
     scratch and just use the earlier one if you get stuck. *)
 
+Hint Constructors step.
+
 Theorem step_deterministic_alt: deterministic step.
 Proof.
-  exact FILL_IN_HERE.
+  unfold deterministic.
+  intros.
+  generalize dependent y2.
+  induction H; intros.
+  inversion H0; subst; eauto.
+  inversion H3. inversion H4.
+  destruct y2; inversion H0; subst.
+  inversion H. apply IHstep in H2; subst; auto.
+  inversion H4. subst. inversion H.
+  destruct y2; inversion H1; subst.
+  inversion H0. inversion H; subst. inversion H3.
+  apply IHstep in H7; subst; auto.
 Qed.
 
 (*-- Check --*)

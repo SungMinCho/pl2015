@@ -14,11 +14,17 @@ Require Export Assignment10_13.
      destruct ... as [[? ?] | [? ?]].
 *)
 
+Hint Constructors aval.
+Hint Constructors astep.
+
 Theorem aexp_strong_progress: forall st a,
   (exists n, a = ANum n) \/
   exists a', a / st ==>a a'.
 Proof.
-  exact FILL_IN_HERE.
+  induction a; eauto; right;
+  inversion IHa1 as [[n N] | [a1' A1']];
+  inversion IHa2 as [[m M] | [a2' A2']];
+  subst; eexists; eauto.
 Qed.
 
 (*-- Check --*)
