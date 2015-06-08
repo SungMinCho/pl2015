@@ -7,7 +7,9 @@ Example succ_hastype_nat__hastype_nat : forall t,
   |- tsucc t \in TNat ->
   |- t \in TNat.  
 Proof.
-  exact FILL_IN_HERE.
+  intros.
+  inversion H;subst.
+  eauto.
 Qed.
 
 (*-- Check --*)
