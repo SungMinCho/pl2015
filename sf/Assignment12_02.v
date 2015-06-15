@@ -7,7 +7,12 @@ Corollary typable_empty__closed : forall t T,
     empty |- t \in T  ->
     closed t.
 Proof.
-  exact FILL_IN_HERE.
+  unfold closed.
+  unfold not.
+  intros.
+  eapply free_in_context in H0; try (apply H).
+  inversion H0.
+  inversion H1.
 Qed.
 
 (*-- Check --*)
